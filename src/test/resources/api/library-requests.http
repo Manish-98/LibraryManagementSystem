@@ -1,0 +1,9 @@
+POST http://localhost:8080/lms/api/v1/library
+Content-Type: application/json
+
+{
+  "name": "Central Library",
+  "address": {
+    "zipCode": "100000"
+  }
+}
