@@ -10,41 +10,16 @@ import org.json.JSONException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.containers.MongoDBContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.List;
 
-@Testcontainers
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-public class LibraryControllerIntegrationTest {
-    @Autowired
-    TestRestTemplate testRestTemplate;
-
-    @LocalServerPort
-    int randomServerPort;
-
-    @Container
-    static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:4.2").withReuse(true);
-
+public class LibraryControllerIntegrationTest extends IntegrationTest{
     @Autowired
     LibraryRepository libraryRepository;
-
-    @DynamicPropertySource
-    static void setProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
-    }
 
     @Test
     void shouldCreateLibrary() throws JSONException {
