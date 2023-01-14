@@ -1,9 +1,14 @@
-POST http://localhost:8080/lms/api/v1/library
+POST https://library-management-system-mfmtcnu6ba-em.a.run.app/lms/api/v1/library
 Content-Type: application/json
 
 {
-  "name": "Central Library",
+  "name": "National Library",
   "address": {
-    "zipCode": "100000"
+    "zipCode": "100009"
   }
 }
+
+###
+
+GET https://library-management-system-mfmtcnu6ba-em.a.run.app/lms/api/v1/libraries
+Content-Type: application/json
