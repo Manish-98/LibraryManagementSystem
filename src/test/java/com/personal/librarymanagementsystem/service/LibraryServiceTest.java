@@ -1,6 +1,7 @@
 package com.personal.librarymanagementsystem.service;
 
 import com.personal.librarymanagementsystem.builder.AddressBuilder;
+import com.personal.librarymanagementsystem.builder.LibraryBuilder;
 import com.personal.librarymanagementsystem.controller.payload.LibraryCreationRequest;
 import com.personal.librarymanagementsystem.model.Address;
 import com.personal.librarymanagementsystem.model.Library;
@@ -8,6 +9,7 @@ import com.personal.librarymanagementsystem.repository.LibraryRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -33,5 +35,23 @@ class LibraryServiceTest {
 
         Library actual = libraryService.save(libraryCreationRequest);
         Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    void readAllLibraries() {
+        UUID uuidOne = UUID.randomUUID();
+        Library libraryOne = new LibraryBuilder(uuidOne).build();
+        UUID uuidTwo = UUID.randomUUID();
+        Library libraryTwo = new LibraryBuilder(uuidTwo).build();
+        List<Library> expectedLibraries = List.of(libraryOne, libraryTwo);
+        
+        LibraryRepository libraryRepository = mock(LibraryRepository.class);
+        LibraryService libraryService = new LibraryService(libraryRepository);
+
+        when(libraryRepository.findAll()).thenReturn(expectedLibraries);
+
+        List<Library> libraries = libraryService.getAll();
+
+        Assertions.assertEquals(expectedLibraries, libraries);
     }
 }

@@ -7,6 +7,13 @@ import org.springframework.http.HttpHeaders;
 
 public class TestUtils {
     @NotNull
+    public static HttpEntity<String> getHttpEntity() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json");
+        return new HttpEntity<>(null, headers);
+    }
+
+    @NotNull
     public static HttpEntity<String> getHttpEntity(@Language("JSON") String requestBody) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");

@@ -4,13 +4,16 @@ import com.personal.librarymanagementsystem.controller.payload.LibraryCreationRe
 import com.personal.librarymanagementsystem.model.Library;
 import com.personal.librarymanagementsystem.service.LibraryService;
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("lms/api/v1/library")
+@RequestMapping("lms/api/v1")
 public class LibraryController {
     private final LibraryService libraryService;
 
@@ -18,8 +21,13 @@ public class LibraryController {
         this.libraryService = libraryService;
     }
 
-    @PostMapping
+    @PostMapping("/library")
     public Library save(@Valid  @RequestBody LibraryCreationRequest libraryCreationRequest) {
         return libraryService.save(libraryCreationRequest);
+    }
+
+    @GetMapping("/libraries")
+    public List<Library> getAll() {
+        return libraryService.getAll();
     }
 }

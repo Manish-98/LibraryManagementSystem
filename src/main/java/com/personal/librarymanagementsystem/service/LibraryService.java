@@ -5,6 +5,7 @@ import com.personal.librarymanagementsystem.model.Library;
 import com.personal.librarymanagementsystem.repository.LibraryRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -19,5 +20,9 @@ public class LibraryService {
         UUID id = UUID.randomUUID();
         Library library = libraryCreationRequest.toLibrary(id);
         return libraryRepository.save(library);
+    }
+
+    public List<Library> getAll() {
+        return libraryRepository.findAll();
     }
 }
