@@ -16,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -51,7 +52,7 @@ class LibraryControllerTest {
                     """.stripIndent();
 
             Address address = new AddressBuilder("100001").build();
-            Library centralLibrary = new Library(UUID.randomUUID(), "Central Library", address);
+            Library centralLibrary = new Library(UUID.randomUUID(), "Central Library", address, LocalDateTime.of(2023, 1, 1, 0, 0));
             when(libraryService.save(any())).thenReturn(centralLibrary);
 
             mockMvc.perform(post("/lms/api/v1/library")
@@ -83,7 +84,7 @@ class LibraryControllerTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(requestBody))
                     .andExpect(status().isBadRequest())
-                    .andExpect(content().json(responseBody, false));
+                    .andExpect(content().json(responseBody, true));
         }
 
         @Test
@@ -106,7 +107,7 @@ class LibraryControllerTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(requestBody))
                     .andExpect(status().isBadRequest())
-                    .andExpect(content().json(responseBody, false));
+                    .andExpect(content().json(responseBody, true));
         }
 
         @Test
@@ -132,7 +133,7 @@ class LibraryControllerTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(requestBody))
                     .andExpect(status().isBadRequest())
-                    .andExpect(content().json(responseBody, false));
+                    .andExpect(content().json(responseBody, true));
         }
     }
 
@@ -158,7 +159,8 @@ class LibraryControllerTest {
                             "state": null,
                             "country": null,
                             "zipCode": "100000"
-                        }
+                        },
+                        "createdAt": "2023-01-01T00:00:00"
                     },
                     {
                         "id": "123e4567-e89b-12d3-a456-426614174001",
@@ -169,7 +171,8 @@ class LibraryControllerTest {
                             "state": null,
                             "country": null,
                             "zipCode": "100000"
-                        }
+                        },
+                        "createdAt": "2023-01-01T00:00:00"
                     }
                 ]
                 """.stripIndent();
@@ -177,7 +180,7 @@ class LibraryControllerTest {
             mockMvc.perform(get("/lms/api/v1/libraries")
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
-                    .andExpect(content().json(expectedResponse, false));
+                    .andExpect(content().json(expectedResponse, true));
         }
     }
 }

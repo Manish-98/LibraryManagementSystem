@@ -8,8 +8,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 public class AssertUtils {
-    public static void assertResponse(String expectedResponse, ResponseEntity<String> response, HttpStatus httpStatus) throws JSONException {
+    public static void assertResponseLenient(String expectedResponse, ResponseEntity<String> response, HttpStatus httpStatus) throws JSONException {
         Assertions.assertEquals(httpStatus, response.getStatusCode());
         JSONAssert.assertEquals(expectedResponse, response.getBody(), JSONCompareMode.LENIENT);
+    }
+
+    public static void assertResponseNonExtensible(String expectedResponse, ResponseEntity<String> response, HttpStatus httpStatus) throws JSONException {
+        Assertions.assertEquals(httpStatus, response.getStatusCode());
+        JSONAssert.assertEquals(expectedResponse, response.getBody(), JSONCompareMode.NON_EXTENSIBLE);
     }
 }

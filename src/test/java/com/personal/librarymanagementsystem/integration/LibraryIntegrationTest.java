@@ -45,12 +45,27 @@ public class LibraryIntegrationTest extends IntegrationTest{
                 }
                 """.stripIndent();
 
+        @Language("JSON")
+        String responseBody = """
+                {
+                    "name": "Central Library",
+                    "address": {
+                        "street": "M.G. Road",
+                        "city": "Delhi",
+                        "state": "New Delhi",
+                        "country": "India",
+                        "zipCode": "100001"
+                    },
+                    "createdAt": "2023-01-01T00:00:00"
+                }
+                """.stripIndent();
+
         String url = "http://localhost:" + randomServerPort + "/lms/api/v1/library";
         HttpEntity<String> request = TestUtils.getHttpEntity(requestBody);
 
         ResponseEntity<String> response = testRestTemplate.exchange(url, HttpMethod.POST, request, String.class);
 
-        AssertUtils.assertResponse(requestBody, response, HttpStatus.OK);
+        AssertUtils.assertResponseLenient(responseBody, response, HttpStatus.OK);
 
         List<Library> libraries = libraryRepository.findAll();
         Assertions.assertEquals(1, libraries.size());
@@ -72,7 +87,8 @@ public class LibraryIntegrationTest extends IntegrationTest{
                             "state": null,
                             "country": null,
                             "zipCode": "100000"
-                        }
+                        },
+                        "createdAt": "2023-01-01T00:00:00"
                     }, {
                         "id": "123e4567-e89b-12d3-a456-426614174001",
                         "name": "Library 2",
@@ -82,7 +98,8 @@ public class LibraryIntegrationTest extends IntegrationTest{
                             "state": null,
                             "country": null,
                             "zipCode": "100000"
-                        }
+                        },
+                        "createdAt": "2023-01-01T00:00:00"
                     }
                 ]
                 """.stripIndent();
@@ -98,6 +115,6 @@ public class LibraryIntegrationTest extends IntegrationTest{
         HttpEntity<String> request = TestUtils.getHttpEntity();
         ResponseEntity<String> response = testRestTemplate.exchange(url, HttpMethod.GET, request, String.class);
 
-        AssertUtils.assertResponse(expectedResponse, response, HttpStatus.OK);
+        AssertUtils.assertResponseNonExtensible(expectedResponse, response, HttpStatus.OK);
     }
 }

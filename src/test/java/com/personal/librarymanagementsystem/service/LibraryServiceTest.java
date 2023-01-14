@@ -9,6 +9,10 @@ import com.personal.librarymanagementsystem.repository.LibraryRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.time.Clock;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,9 +31,10 @@ class LibraryServiceTest {
         mockStatic(UUID.class);
         when(UUID.randomUUID()).thenReturn(id);
         LibraryRepository libraryRepository = mock(LibraryRepository.class);
-        LibraryService libraryService = new LibraryService(libraryRepository);
+        Clock clock = Clock.fixed(Instant.parse("2023-01-01T00:00:00.00Z"), ZoneOffset.UTC);
+        LibraryService libraryService = new LibraryService(clock, libraryRepository);
         LibraryCreationRequest libraryCreationRequest = new LibraryCreationRequest(name, address);
-        Library expected = new Library(id, name, address);
+        Library expected = new Library(id, name, address, LocalDateTime.of(2023, 1, 1, 0, 0));
 
         when(libraryRepository.save(any())).thenReturn(expected);
 
@@ -46,7 +51,8 @@ class LibraryServiceTest {
         List<Library> expectedLibraries = List.of(libraryOne, libraryTwo);
         
         LibraryRepository libraryRepository = mock(LibraryRepository.class);
-        LibraryService libraryService = new LibraryService(libraryRepository);
+        Clock clock = Clock.fixed(Instant.parse("2023-01-01T00:00:00.00Z"), ZoneOffset.UTC);
+        LibraryService libraryService = new LibraryService(clock, libraryRepository);
 
         when(libraryRepository.findAll()).thenReturn(expectedLibraries);
 

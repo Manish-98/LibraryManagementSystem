@@ -1,5 +1,6 @@
 package com.personal.librarymanagementsystem.integration;
 
+import com.personal.librarymanagementsystem.utils.TestBeans;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -11,7 +12,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 @Testcontainers
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {TestBeans.class})
 public class IntegrationTest {
     @Autowired
     TestRestTemplate testRestTemplate;
