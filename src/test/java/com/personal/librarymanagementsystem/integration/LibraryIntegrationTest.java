@@ -20,7 +20,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 import java.util.UUID;
 
-public class LibraryIntegrationTest extends IntegrationTest{
+public class LibraryIntegrationTest extends IntegrationTest {
     @Autowired
     LibraryRepository libraryRepository;
 
@@ -116,5 +116,51 @@ public class LibraryIntegrationTest extends IntegrationTest{
         ResponseEntity<String> response = testRestTemplate.exchange(url, HttpMethod.GET, request, String.class);
 
         AssertUtils.assertResponseNonExtensible(expectedResponse, response, HttpStatus.OK);
+    }
+
+    @Test
+    void shouldUpdateLibrary() throws JSONException {
+        @Language("JSON")
+        String requestBody = """
+                {
+                    "name": "Central Library",
+                    "address": {
+                        "street": "M.G. Road",
+                        "country": "India"
+                    }
+                }
+                """.stripIndent();
+
+        @Language("JSON")
+        String responseBody = """
+                {
+                    "id": "123e4567-e89b-12d3-a456-426614174000",
+                    "name": "Central Library",
+                    "address": {
+                        "street": "M.G. Road",
+                        "city": null,
+                        "state": null,
+                        "country": "India",
+                        "zipCode": "100000"
+                    },
+                    "createdAt": "2023-01-01T00:00:00"
+                }
+                """.stripIndent();
+
+        UUID libraryId = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
+        Library existingLibrary = new LibraryBuilder(libraryId).withName("Library 1").build();
+        libraryRepository.saveAll(List.of(existingLibrary));
+
+        String url = "http://localhost:" + randomServerPort + "/lms/api/v1/library/123e4567-e89b-12d3-a456-426614174000";
+        HttpEntity<String> request = TestUtils.getHttpEntity(requestBody);
+
+        ResponseEntity<String> response = testRestTemplate.exchange(url, HttpMethod.PATCH, request, String.class);
+
+        AssertUtils.assertResponseNonExtensible(responseBody, response, HttpStatus.OK);
+
+        List<Library> libraries = libraryRepository.findAll();
+        Assertions.assertEquals(1, libraries.size());
+        Assertions.assertEquals("Central Library", libraries.get(0).name());
+        Assertions.assertEquals(new Address("M.G. Road", null, null, "India", "100000"), libraries.get(0).address());
     }
 }

@@ -1,7 +1,6 @@
 package com.personal.librarymanagementsystem.exception;
 
 import com.personal.librarymanagementsystem.utils.NullUtils;
-import lombok.extern.flogger.Flogger;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
@@ -36,6 +35,17 @@ public class GlobalExceptionHandler {
             errorResponse.put(errorField, errors);
 
         }
+        log.error(errorResponse.toString());
+        return errorResponse;
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(LibraryNotFoundException.class)
+    public HashMap<String, List<String>> handleException(LibraryNotFoundException ex) {
+        HashMap<String, List<String>> errorResponse = new HashMap<>() {{
+            put("library", List.of(ex.getMessage()));
+        }};
+
         log.error(errorResponse.toString());
         return errorResponse;
     }

@@ -23,6 +23,8 @@ dependencies {
     testImplementation 'org.testcontainers:testcontainers:1.17.6'
     testImplementation 'org.testcontainers:junit-jupiter:1.17.6'
     testImplementation "org.testcontainers:mongodb:1.17.6"
+    testImplementation "org.apache.httpcomponents.client5:httpclient5:5.2.1"
+    testImplementation "org.assertj:assertj-core:3.23.1"
 }
 
 tasks.named('test') {
