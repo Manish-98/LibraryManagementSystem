@@ -1,3 +1,15 @@
+PATCH https://library-management-system-mfmtcnu6ba-em.a.run.app/lms/api/v1/library/5fc70653-fc1b-4ca0-920e-1d704832c665
+Content-Type: application/json
+
+{
+  "name": "National Library",
+  "address": {
+    "street": "M. G. Road"
+  }
+}
+
+###
+
 POST https://library-management-system-mfmtcnu6ba-em.a.run.app/lms/api/v1/library
 Content-Type: application/json
 
@@ -12,3 +24,4 @@ Content-Type: application/json
 
 GET https://library-management-system-mfmtcnu6ba-em.a.run.app/lms/api/v1/libraries
 Content-Type: application/json
+
