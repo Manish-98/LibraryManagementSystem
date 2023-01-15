@@ -3,7 +3,8 @@ package com.personal.librarymanagementsystem.controller;
 import com.personal.librarymanagementsystem.controller.payload.LibraryCreationRequest;
 import com.personal.librarymanagementsystem.model.Library;
 import com.personal.librarymanagementsystem.service.LibraryService;
-import jakarta.validation.Valid;
+import com.personal.librarymanagementsystem.validator.ValidatorGroup;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +23,7 @@ public class LibraryController {
     }
 
     @PostMapping("/library")
-    public Library save(@Valid  @RequestBody LibraryCreationRequest libraryCreationRequest) {
+    public Library save(@Validated({ValidatorGroup.CreateRequestValidation.class}) @RequestBody LibraryCreationRequest libraryCreationRequest) {
         return libraryService.save(libraryCreationRequest);
     }
 

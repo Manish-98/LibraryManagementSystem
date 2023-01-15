@@ -63,10 +63,36 @@ class LibraryControllerTest {
         }
 
         @Test
+        void shouldReturnBadRequestIfLibraryNameIsNull() throws Exception {
+            @Language("JSON")
+            String requestBody = """
+                    {
+                        "address": {
+                            "zipCode": "100001"
+                        }
+                    }
+                    """.stripIndent();
+
+            @Language("JSON")
+            String responseBody = """
+                    {
+                        "name": ["Library name should not be blank"]
+                    }
+                    """;
+
+            mockMvc.perform(post("/lms/api/v1/library")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(requestBody))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().json(responseBody, true));
+        }
+
+        @Test
         void shouldReturnBadRequestIfLibraryNameIsBlank() throws Exception {
             @Language("JSON")
             String requestBody = """
                     {
+                        "name": "",
                         "address": {
                             "zipCode": "100001"
                         }
@@ -111,13 +137,17 @@ class LibraryControllerTest {
         }
 
         @Test
-        void shouldReturnBadRequestIfAddressZipCodeIsInvalid() throws Exception {
+        void shouldReturnBadRequestIfAddressIsInvalid() throws Exception {
             @Language("JSON")
             String requestBody = """
                     {
-                        "name": "Central Library",
+                        "name": "Central library",
                         "address": {
-                            "zipCode": "someZipCode"
+                            "street": "",
+                            "city": "",
+                            "state": "",
+                            "country": "",
+                            "zipCode": "Some invalid zipcode"
                         }
                     }
                     """.stripIndent();
@@ -125,6 +155,10 @@ class LibraryControllerTest {
             @Language("JSON")
             String responseBody = """
                     {
+                        "address.street": ["Street should not be blank"],
+                        "address.city": ["City should not be blank"],
+                        "address.state": ["State should not be blank"],
+                        "address.country": ["Country should not be blank"],
                         "address.zipCode": ["Invalid zip code"]
                     }
                     """;
