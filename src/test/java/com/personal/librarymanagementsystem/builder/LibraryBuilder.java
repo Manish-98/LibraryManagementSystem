@@ -11,12 +11,14 @@ public class LibraryBuilder {
     private String name;
     private Address address;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public LibraryBuilder(UUID id) {
         this.id = id;
         this.name = "Default Library";
         this.address = new AddressBuilder("100000").build();
         this.createdAt = LocalDateTime.of(2023, 1, 1, 0, 0);
+        this.updatedAt = LocalDateTime.of(2023, 1, 1, 0, 0);
     }
 
     public LibraryBuilder withName(String name) {
@@ -34,7 +36,12 @@ public class LibraryBuilder {
         return this;
     }
 
+    public LibraryBuilder withUpdationDateTime(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+        return this;
+    }
+
     public Library build() {
-        return new Library(id, name, address, createdAt);
+        return new Library(id, name, address, createdAt, updatedAt);
     }
 }

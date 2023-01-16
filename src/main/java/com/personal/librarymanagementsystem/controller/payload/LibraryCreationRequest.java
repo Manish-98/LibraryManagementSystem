@@ -18,6 +18,6 @@ public record LibraryCreationRequest(
         Address address
 ) {
     public Library toLibrary(UUID id, LocalDateTime localDateTime) {
-        return new Library(id, name, address, localDateTime);
+        return new Library(id, name, address, localDateTime, localDateTime);
     }
 }

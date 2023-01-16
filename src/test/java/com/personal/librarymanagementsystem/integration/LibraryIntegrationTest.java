@@ -17,6 +17,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -56,7 +57,8 @@ public class LibraryIntegrationTest extends IntegrationTest {
                         "country": "India",
                         "zipCode": "100001"
                     },
-                    "createdAt": "2023-01-01T00:00:00"
+                    "createdAt": "2023-01-01T00:00:00",
+                    "updatedAt": "2023-01-01T00:00:00"
                 }
                 """.stripIndent();
 
@@ -88,7 +90,8 @@ public class LibraryIntegrationTest extends IntegrationTest {
                             "country": null,
                             "zipCode": "100000"
                         },
-                        "createdAt": "2023-01-01T00:00:00"
+                        "createdAt": "2023-01-01T00:00:00",
+                        "updatedAt": "2023-01-01T00:00:00"
                     }, {
                         "id": "123e4567-e89b-12d3-a456-426614174001",
                         "name": "Library 2",
@@ -99,7 +102,8 @@ public class LibraryIntegrationTest extends IntegrationTest {
                             "country": null,
                             "zipCode": "100000"
                         },
-                        "createdAt": "2023-01-01T00:00:00"
+                        "createdAt": "2023-01-01T00:00:00",
+                        "updatedAt": "2023-01-01T00:00:00"
                     }
                 ]
                 """.stripIndent();
@@ -143,12 +147,18 @@ public class LibraryIntegrationTest extends IntegrationTest {
                         "country": "India",
                         "zipCode": "100000"
                     },
-                    "createdAt": "2023-01-01T00:00:00"
+                    "createdAt": "2022-01-01T00:00:00",
+                    "updatedAt": "2023-01-01T00:00:00"
                 }
                 """.stripIndent();
 
         UUID libraryId = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
-        Library existingLibrary = new LibraryBuilder(libraryId).withName("Library 1").build();
+        LocalDateTime localDateTime = LocalDateTime.of(2022, 1, 1, 0, 0);
+        Library existingLibrary = new LibraryBuilder(libraryId)
+                .withName("Library 1")
+                .withCreationDateTime(localDateTime)
+                .withUpdationDateTime(localDateTime)
+                .build();
         libraryRepository.saveAll(List.of(existingLibrary));
 
         String url = "http://localhost:" + randomServerPort + "/lms/api/v1/library/123e4567-e89b-12d3-a456-426614174000";
@@ -162,5 +172,7 @@ public class LibraryIntegrationTest extends IntegrationTest {
         Assertions.assertEquals(1, libraries.size());
         Assertions.assertEquals("Central Library", libraries.get(0).name());
         Assertions.assertEquals(new Address("M.G. Road", null, null, "India", "100000"), libraries.get(0).address());
+        Assertions.assertEquals(localDateTime, libraries.get(0).createdAt());
+        Assertions.assertEquals(LocalDateTime.of(2023, 1, 1, 0, 0), libraries.get(0).updatedAt());
     }
 }

@@ -39,7 +39,7 @@ public class LibraryService {
         Optional<Library> library = libraryRepository.findById(id);
         if (library.isEmpty()) throw new LibraryNotFoundException();
 
-        Library updatedLibrary = library.get().updateWith(libraryUpdationRequest);
+        Library updatedLibrary = library.get().updateWith(libraryUpdationRequest, LocalDateTime.ofInstant(clock.instant(), ZoneOffset.UTC));
         return libraryRepository.save(updatedLibrary);
     }
 }

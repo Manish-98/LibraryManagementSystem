@@ -40,7 +40,12 @@ class LibraryServiceTest {
         Clock clock = Clock.fixed(Instant.parse("2023-01-01T00:00:00.00Z"), ZoneOffset.UTC);
         LibraryService libraryService = new LibraryService(clock, libraryRepository);
         LibraryCreationRequest libraryCreationRequest = new LibraryCreationRequest(name, address);
-        Library expected = new Library(id, name, address, LocalDateTime.of(2023, 1, 1, 0, 0));
+        LocalDateTime localDateTime = LocalDateTime.of(2023, 1, 1, 0, 0);
+        Library expected = new LibraryBuilder(id)
+                .withAddress(address)
+                .withCreationDateTime(localDateTime)
+                .withUpdationDateTime(localDateTime)
+                .build();
 
         when(libraryRepository.save(any())).thenReturn(expected);
 
@@ -101,11 +106,14 @@ class LibraryServiceTest {
     void updateLibraryIfAlreadyExists() throws LibraryNotFoundException {
         UUID id = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
         Library library = new LibraryBuilder(id).withName("Default Library").build();
-        Library updatedLibrary = new LibraryBuilder(id).withName("Central Library").build();
+        Library updatedLibrary = new LibraryBuilder(id)
+                .withName("Central Library")
+                .withUpdationDateTime(LocalDateTime.of(2023, 1, 5, 0, 0))
+                .build();
         LibraryUpdationRequest libraryUpdationRequest = new LibraryUpdationRequest("Central Library", null);
 
         LibraryRepository libraryRepository = mock(LibraryRepository.class);
-        Clock clock = Clock.fixed(Instant.parse("2023-01-01T00:00:00.00Z"), ZoneOffset.UTC);
+        Clock clock = Clock.fixed(Instant.parse("2023-01-05T00:00:00.00Z"), ZoneOffset.UTC);
         LibraryService libraryService = new LibraryService(clock, libraryRepository);
 
         when(libraryRepository.findById(any())).thenReturn(Optional.of(library));

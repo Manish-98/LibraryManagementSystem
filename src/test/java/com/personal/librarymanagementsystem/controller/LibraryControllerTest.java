@@ -56,7 +56,14 @@ class LibraryControllerTest {
                     """.stripIndent();
 
             Address address = new AddressBuilder("100001").build();
-            Library centralLibrary = new Library(UUID.randomUUID(), "Central Library", address, LocalDateTime.of(2023, 1, 1, 0, 0));
+            LocalDateTime localDateTime = LocalDateTime.of(2023, 1, 1, 0, 0);
+            Library centralLibrary = new LibraryBuilder(UUID.randomUUID())
+                    .withName("Central Library")
+                    .withAddress(address)
+                    .withCreationDateTime(localDateTime)
+                    .withUpdationDateTime(localDateTime)
+                    .build();
+
             when(libraryService.save(any())).thenReturn(centralLibrary);
 
             mockMvc.perform(post("/lms/api/v1/library")
@@ -222,7 +229,8 @@ class LibraryControllerTest {
                                 "country": null,
                                 "zipCode": "100000"
                             },
-                            "createdAt": "2023-01-01T00:00:00"
+                            "createdAt": "2023-01-01T00:00:00",
+                            "updatedAt": "2023-01-01T00:00:00"
                         },
                         {
                             "id": "123e4567-e89b-12d3-a456-426614174001",
@@ -234,7 +242,8 @@ class LibraryControllerTest {
                                 "country": null,
                                 "zipCode": "100000"
                             },
-                            "createdAt": "2023-01-01T00:00:00"
+                            "createdAt": "2023-01-01T00:00:00",
+                            "updatedAt": "2023-01-01T00:00:00"
                         }
                     ]
                     """.stripIndent();
@@ -272,12 +281,18 @@ class LibraryControllerTest {
                             "country": null,
                             "zipCode": "100000"
                         },
-                        "createdAt": "2023-01-01T00:00:00"
+                        "createdAt": "2023-01-01T00:00:00",
+                        "updatedAt": "2023-01-05T00:00:00"
                     }
                     """.stripIndent();
 
             Address address = new AddressBuilder("100000").withStreet("Some street").build();
-            Library centralLibrary = new Library(UUID.fromString("123e4567-e89b-12d3-a456-426614174000"), "Central Library", address, LocalDateTime.of(2023, 1, 1, 0, 0));
+            Library centralLibrary = new LibraryBuilder(UUID.fromString("123e4567-e89b-12d3-a456-426614174000"))
+                    .withName("Central Library")
+                    .withAddress(address)
+                    .withCreationDateTime(LocalDateTime.of(2023, 1, 1, 0, 0))
+                    .withUpdationDateTime(LocalDateTime.of(2023, 1, 5, 0, 0))
+                    .build();
             when(libraryService.update(any(), any())).thenReturn(centralLibrary);
 
             mockMvc.perform(patch("/lms/api/v1/library/123e4567-e89b-12d3-a456-426614174000")
@@ -300,7 +315,7 @@ class LibraryControllerTest {
             LibraryUpdationRequest libraryUpdationRequest = new LibraryUpdationRequest(null, new AddressBuilder(null).withStreet("Some street").build());
 
             Address address = new AddressBuilder("100000").withStreet("Some street").build();
-            Library centralLibrary = new Library(UUID.fromString("123e4567-e89b-12d3-a456-426614174000"), "Central Library", address, LocalDateTime.of(2023, 1, 1, 0, 0));
+            Library centralLibrary = new Library(UUID.fromString("123e4567-e89b-12d3-a456-426614174000"), "Central Library", address, LocalDateTime.of(2023, 1, 1, 0, 0), LocalDateTime.of(2023, 1, 5, 0, 0));
             when(libraryService.update(any(), any())).thenReturn(centralLibrary);
 
             mockMvc.perform(patch("/lms/api/v1/library/123e4567-e89b-12d3-a456-426614174000")
